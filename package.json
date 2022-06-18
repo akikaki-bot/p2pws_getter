@@ -1,0 +1,18 @@
+{
+  "name": "p2peq_event",
+  "version": "1.0.0",
+  "description": "p2p地震情報からWebSocketで送られてきた情報をEventEmitterで送るやつ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "akikaki <datatensouakikaki@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/request": "^2.48.8",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4",
+    "ws": "^8.8.0"
+  }
+}
