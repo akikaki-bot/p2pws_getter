@@ -4,6 +4,12 @@ P2P地震情報 WebSocket API から送られてきた情報を `Data` か `Area
 
 エミットするやつ
 
+## Install
+
+```
+npm i p2peq_event
+```
+
 ## Example
 
 ```ts
