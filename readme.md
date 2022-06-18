@@ -8,7 +8,7 @@ P2P地震情報 WebSocket API から送られてきた情報を `Data` か `Area
 
 ```ts
 
-import { P2PWSClient } from './any/p2pws_getter'
+import { P2PWSClient } from 'p2peq_event'
 
 const client = new P2PWSClient()
 
