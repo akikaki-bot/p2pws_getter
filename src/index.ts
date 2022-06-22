@@ -11,25 +11,69 @@ export class P2PWSClient extends EventEmitter {
         }
 
         ws.onerror = async (error) => {
-            throw new Error(`[WebSocket Conneted Error] ${error.message}`)
+           this.emit('error', new Error(error))
         }
        
         ws.onmessage = async (data) => {
-            const datas = JSON.parse(data.data.toString()) as Data | Areapeers
+            const datas = JSON.parse(data.data.toString()) as Data | Areapeers | EEWDetection
 
-           if(datas.code === 551){
+           if(
+            datas.code === 551
+            ){
+
            this.emit('earthquake', new Data_OLD(datas))
+
            }
-           if(datas.code === 555){
-           this.emit('earthquake', new Areapeers_OLD(datas))
+
+           if(
+            datas.code === 555
+            ){
+
+           this.emit('areapeers', new Areapeers_OLD(datas))
+
            }
+
+
+           if(
+            datas.code === 554
+           ){
+
+           this.emit('eewdetection', new EEW(datas))
+
+           }
+
+
         }
      }
 }
 
 export declare interface P2PWSClient {
-    on(event :'earthquake', listener:(data: Data | Areapeers) => void): this
-    on(event :'ready', listener: () => void):this
+    on(event :'earthquake', listener:(data: Data) => void): this
+    on(event :'ready', listener: () => void): this
+    on(event :'error', listener: (error: Error) => void): this
+    on(event :'areapeers', listener: (data: Areapeers) => void): this
+    on(event :'eewdetection', listener: (data: EEWDetection) => void): void
+}
+
+export type EEWDetection = { 
+    _id: string
+    code: 554
+    time: string
+    type: string[]
+}
+
+export class EEW {
+    _id: string
+    code: 554
+    time: string
+    type: string[]
+
+    constructor(data: EEWDetection){
+        this._id = data._id
+        this.code = data.code
+        this.time = data.time
+        this.type = data.type
+    }
 }
 
 export type Data = {
