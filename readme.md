@@ -22,12 +22,21 @@ const client = new P2PWSClient()
 client.run()
 
 client.on('earthquake', (data) => {
-    if(data.code === 555){
-        /* 処理 */
-    }
-    if(data.code === 551){
-        /* 処理 */
-    }
+  /*
+  処理 (Return Type <Data>)
+  */
+})
+
+client.on('areapeers', (data) => {
+    /*
+    処理 (Return Type <Areapeers>)
+    */
+})
+
+client.on('eewdetection', (data) => {
+    /*
+    処理 (Return Type <EEWDetection>)
+    */
 })
 
 ```
@@ -94,6 +103,15 @@ Areapeers > UserQuakeArray
 ```
  id: number
  peer: number
+```
+
+EEWDetection
+
+```
+_id: string
+code: 554
+time: string
+type: string[]
 ```
 
 ## Use Modules

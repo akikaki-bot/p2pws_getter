@@ -51,7 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.Areapeers_OLD = exports.Data_OLD = exports.P2PWSClient = void 0;
+exports.Areapeers_OLD = exports.Data_OLD = exports.EEW = exports.P2PWSClient = void 0;
 var events_1 = require("events");
 var ws_1 = require("ws");
 var P2PWSClient = /** @class */ (function (_super) {
@@ -70,7 +70,8 @@ var P2PWSClient = /** @class */ (function (_super) {
                 }
                 ws.onerror = function (error) { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        throw new Error("[WebSocket Conneted Error] ".concat(error.message));
+                        this.emit('error', new Error(error));
+                        return [2 /*return*/];
                     });
                 }); };
                 ws.onmessage = function (data) { return __awaiter(_this, void 0, void 0, function () {
@@ -81,7 +82,10 @@ var P2PWSClient = /** @class */ (function (_super) {
                             this.emit('earthquake', new Data_OLD(datas));
                         }
                         if (datas.code === 555) {
-                            this.emit('earthquake', new Areapeers_OLD(datas));
+                            this.emit('areapeers', new Areapeers_OLD(datas));
+                        }
+                        if (datas.code === 554) {
+                            this.emit('eewdetection', new EEW(datas));
                         }
                         return [2 /*return*/];
                     });
@@ -93,6 +97,16 @@ var P2PWSClient = /** @class */ (function (_super) {
     return P2PWSClient;
 }(events_1.EventEmitter));
 exports.P2PWSClient = P2PWSClient;
+var EEW = /** @class */ (function () {
+    function EEW(data) {
+        this._id = data._id;
+        this.code = data.code;
+        this.time = data.time;
+        this.type = data.type;
+    }
+    return EEW;
+}());
+exports.EEW = EEW;
 var Data_OLD = /** @class */ (function () {
     function Data_OLD(data) {
         this._id = data._id;
