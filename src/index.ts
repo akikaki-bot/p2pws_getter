@@ -10,39 +10,42 @@ export class P2PWSClient extends EventEmitter {
             this.emit('ready')
         }
 
+        /**
+         * 
+         * @param {EventEmitter} error 
+         * エラーが起きたときに発火するイベント。このウェブソケット安定しすぎてエラー出ない。 
+         */
         ws.onerror = async (error) => {
            this.emit('error', new Error(error))
         }
        
-        ws.onmessage = async (data) => {
+        /**
+         * p2pサーバーからなにかきたら発火する関数。
+         * 
+         * @param {any} data どれかの型のデータが入ってる生データ なかみはjson。
+         * 
+         */
+        ws.onmessage = async (data : any) => {
             const datas = JSON.parse(data.data.toString()) as Data | Areapeers | EEWDetection
 
-           if(
-            datas.code === 551
-            ){
+           if(datas.code === 551){
 
            this.emit('earthquake', new Data_OLD(datas))
 
            }
 
-           if(
-            datas.code === 555
-            ){
+           if(datas.code === 555){
 
            this.emit('areapeers', new Areapeers_OLD(datas))
 
            }
 
 
-           if(
-            datas.code === 554
-           ){
+           if(datas.code === 554){
 
            this.emit('eewdetection', new EEW(datas))
 
            }
-
-
         }
      }
 }
@@ -55,6 +58,12 @@ export declare interface P2PWSClient {
     on(event :'eewdetection', listener: (data: EEWDetection) => void): void
 }
 
+/**
+ * @type EEWDetection
+ * 
+ * EEWの生データ。
+ * 
+ */
 export type EEWDetection = { 
     _id: string
     code: 554
@@ -62,6 +71,10 @@ export type EEWDetection = {
     type: string[]
 }
 
+/**
+ * @class
+ * EEWDetectionに肉付けをするのクラス。
+ */
 export class EEW {
     _id: string
     code: 554
@@ -76,6 +89,16 @@ export class EEW {
     }
 }
 
+/**
+ * @type Data {object} 
+ * 
+ * 地震情報の際に送られてくるJSONの型。
+ * いろいろと複雑。
+ * 
+ * 
+ * typeとかcorrectとかdomesticTsunamiにある"ScalePrompt"とかの謎の英語の解説は別紙の
+ * example/lang.mdにないよ。
+ */
 export type Data = {
     _id:string
     code: 551
@@ -83,18 +106,20 @@ export type Data = {
     issue:{
         source: string
         time :string
-        type : "ScalePrompt" | "Destination" | "ScaleAndDestination" | "DetailScale " | " Foreign " | "Other" 
-        correct: "None" | "Unknown" | "ScaleOnly" | "DestinationOnly" | "ScaleAndDestination"
+        type : Typeofinfo
+        correct: Infoonly
     }
     earthquake:{
         time: string
         hypocenter: HypocenterFormat
-        maxScale: "-1" | "10" | "20" | "30" | "40" | "45" | "50" | "55" | "60" | "70"
-        domesticTsunami: "None" | "Unknown" | "Checking" | "NoneEffective" | "Watch" | "Warning"
-        forginTsunami: "None" | "Unknown" | "Checking" | "NonEffectiveNearby" | "WarningNearby" | "WarningPacific" | "WarningPacificWide" | "WarningIndian" | "WarningIndianWide" | "Potential"
+        maxScale: Scale
+        domesticTsunami: Tsunamitype
+        forginTsunami: Forgintsunami
     }
     points: Array<PointFormat>
 }
+
+//Todo JSDocを書く
 
 export class Data_OLD {
     _id:string
@@ -103,15 +128,15 @@ export class Data_OLD {
     issue:{
         source: string
         time :string
-        type : "ScalePrompt" | "Destination" | "ScaleAndDestination" | "DetailScale " | " Foreign " | "Other" 
-        correct: "None" | "Unknown" | "ScaleOnly" | "DestinationOnly" | "ScaleAndDestination"
+        type : Typeofinfo
+        correct: Infoonly
     }
     earthquake:{
         time: string
         hypocenter: HypocenterFormat
-        maxScale: "-1" | "10" | "20" | "30" | "40" | "45" | "50" | "55" | "60" | "70"
-        domesticTsunami: "None" | "Unknown" | "Checking" | "NoneEffective" | "Watch" | "Warning"
-        forginTsunami: "None" | "Unknown" | "Checking" | "NonEffectiveNearby" | "WarningNearby" | "WarningPacific" | "WarningPacificWide" | "WarningIndian" | "WarningIndianWide" | "Potential"
+        maxScale: Scale
+        domesticTsunami: Tsunamitype
+        forginTsunami: Forgintsunami
     }
     points: Array<PointFormat>
 
@@ -162,8 +187,46 @@ export type PointFormat =
         pref: string
         addr: string
         isArea: boolean
-        scale: "10" | "20" | "30" | "40" | "45" | "46" | "50" | "55" | "60" | "70" 
+        scale: Scale
     }
+
+/**
+ * ・Typeofinfo
+ * 
+ * @description
+ * type of information
+ * 
+ * 流れてくる情報の種類。
+ */
+export type Typeofinfo = "ScalePrompt" | "Destination" | "ScaleAndDestination" | "DetailScale" | "Foreign" | "Other" 
+/**
+ * ・Infoonly
+ * 
+ * @description
+ * 
+ * 情報に入っている情報（？）
+ */
+export type Infoonly = "None" | "Unknown" | "ScaleOnly" | "DestinationOnly" | "ScaleAndDestination"
+/**
+ * Forgintsunami
+ * 
+ * @description
+ * 
+ * 海外の津波情報
+ */
+export type Forgintsunami = "None" | "Unknown" | "Checking" | "NonEffectiveNearby" | "WarningNearby" | "WarningPacific" | "WarningPacificWide" | "WarningIndian" | "WarningIndianWide" | "Potential"
+/**
+ * Tsunamitype
+ * 
+ * @description
+ * 
+ * 津波警報の種類 / 有無
+ */
+export type Tsunamitype = "None" | "Unknown" | "Checking" | "NoneEffective" | "Watch" | "Warning" | "MajorWarning"
+/**
+ * Scale
+ */
+export type Scale = "10" | "20" | "30" | "40" | "45" | "46" | "50" | "55" | "60" | "70" 
 
 export type HypocenterFormat = {
     name: string
@@ -178,7 +241,6 @@ export type UserQuakeArray = { id: number, peer: number}
 export type Areapeers = {
     _id : string
     areas: Array<UserQuakeArray>
-
     code: 555
     create_at: string
     expire: string
@@ -186,7 +248,6 @@ export type Areapeers = {
     time: string
     uid: string
     ver : string
-    
 }
 
 
