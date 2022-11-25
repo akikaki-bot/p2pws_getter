@@ -11,12 +11,22 @@ export declare interface P2PWSClient {
     on(event: 'areapeers', listener: (data: Areapeers) => void): this;
     on(event: 'eewdetection', listener: (data: EEWDetection) => void): void;
 }
+/**
+ * @type EEWDetection
+ *
+ * EEWの生データ。
+ *
+ */
 export declare type EEWDetection = {
     _id: string;
     code: 554;
     time: string;
     type: string[];
 };
+/**
+ * @class
+ * EEWDetectionに肉付けをするのクラス。
+ */
 export declare class EEW {
     _id: string;
     code: 554;
@@ -24,6 +34,16 @@ export declare class EEW {
     type: string[];
     constructor(data: EEWDetection);
 }
+/**
+ * @type Data {object}
+ *
+ * 地震情報の際に送られてくるJSONの型。
+ * いろいろと複雑。
+ *
+ *
+ * typeとかcorrectとかdomesticTsunamiにある"ScalePrompt"とかの謎の英語の解説は別紙の
+ * example/lang.mdにないよ。
+ */
 export declare type Data = {
     _id: string;
     code: 551;
@@ -31,15 +51,15 @@ export declare type Data = {
     issue: {
         source: string;
         time: string;
-        type: "ScalePrompt" | "Destination" | "ScaleAndDestination" | "DetailScale " | " Foreign " | "Other";
-        correct: "None" | "Unknown" | "ScaleOnly" | "DestinationOnly" | "ScaleAndDestination";
+        type: Typeofinfo;
+        correct: Infoonly;
     };
     earthquake: {
         time: string;
         hypocenter: HypocenterFormat;
-        maxScale: "-1" | "10" | "20" | "30" | "40" | "45" | "50" | "55" | "60" | "70";
-        domesticTsunami: "None" | "Unknown" | "Checking" | "NoneEffective" | "Watch" | "Warning";
-        forginTsunami: "None" | "Unknown" | "Checking" | "NonEffectiveNearby" | "WarningNearby" | "WarningPacific" | "WarningPacificWide" | "WarningIndian" | "WarningIndianWide" | "Potential";
+        maxScale: Scale;
+        domesticTsunami: Tsunamitype;
+        forginTsunami: Forgintsunami;
     };
     points: Array<PointFormat>;
 };
@@ -50,15 +70,15 @@ export declare class Data_OLD {
     issue: {
         source: string;
         time: string;
-        type: "ScalePrompt" | "Destination" | "ScaleAndDestination" | "DetailScale " | " Foreign " | "Other";
-        correct: "None" | "Unknown" | "ScaleOnly" | "DestinationOnly" | "ScaleAndDestination";
+        type: Typeofinfo;
+        correct: Infoonly;
     };
     earthquake: {
         time: string;
         hypocenter: HypocenterFormat;
-        maxScale: "-1" | "10" | "20" | "30" | "40" | "45" | "50" | "55" | "60" | "70";
-        domesticTsunami: "None" | "Unknown" | "Checking" | "NoneEffective" | "Watch" | "Warning";
-        forginTsunami: "None" | "Unknown" | "Checking" | "NonEffectiveNearby" | "WarningNearby" | "WarningPacific" | "WarningPacificWide" | "WarningIndian" | "WarningIndianWide" | "Potential";
+        maxScale: Scale;
+        domesticTsunami: Tsunamitype;
+        forginTsunami: Forgintsunami;
     };
     points: Array<PointFormat>;
     constructor(data: Data);
@@ -79,8 +99,45 @@ export declare type PointFormat = {
     pref: string;
     addr: string;
     isArea: boolean;
-    scale: "10" | "20" | "30" | "40" | "45" | "46" | "50" | "55" | "60" | "70";
+    scale: Scale;
 };
+/**
+ * ・Typeofinfo
+ *
+ * @description
+ * type of information
+ *
+ * 流れてくる情報の種類。
+ */
+export declare type Typeofinfo = "ScalePrompt" | "Destination" | "ScaleAndDestination" | "DetailScale" | "Foreign" | "Other";
+/**
+ * ・Infoonly
+ *
+ * @description
+ *
+ * 情報に入っている情報（？）
+ */
+export declare type Infoonly = "None" | "Unknown" | "ScaleOnly" | "DestinationOnly" | "ScaleAndDestination";
+/**
+ * Forgintsunami
+ *
+ * @description
+ *
+ * 海外の津波情報
+ */
+export declare type Forgintsunami = "None" | "Unknown" | "Checking" | "NonEffectiveNearby" | "WarningNearby" | "WarningPacific" | "WarningPacificWide" | "WarningIndian" | "WarningIndianWide" | "Potential";
+/**
+ * Tsunamitype
+ *
+ * @description
+ *
+ * 津波警報の種類 / 有無
+ */
+export declare type Tsunamitype = "None" | "Unknown" | "Checking" | "NoneEffective" | "Watch" | "Warning" | "MajorWarning";
+/**
+ * Scale
+ */
+export declare type Scale = "10" | "20" | "30" | "40" | "45" | "46" | "50" | "55" | "60" | "70";
 export declare type HypocenterFormat = {
     name: string;
     latitude: number | -200;

@@ -68,12 +68,23 @@ var P2PWSClient = /** @class */ (function (_super) {
                 if (ws.readyState === 0) {
                     this.emit('ready');
                 }
+                /**
+                 *
+                 * @param {EventEmitter} error
+                 * エラーが起きたときに発火するイベント。このウェブソケット安定しすぎてエラー出ない。
+                 */
                 ws.onerror = function (error) { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         this.emit('error', new Error(error));
                         return [2 /*return*/];
                     });
                 }); };
+                /**
+                 * p2pサーバーからなにかきたら発火する関数。
+                 *
+                 * @param {any} data どれかの型のデータが入ってる生データ なかみはjson。
+                 *
+                 */
                 ws.onmessage = function (data) { return __awaiter(_this, void 0, void 0, function () {
                     var datas;
                     return __generator(this, function (_a) {
@@ -97,6 +108,10 @@ var P2PWSClient = /** @class */ (function (_super) {
     return P2PWSClient;
 }(events_1.EventEmitter));
 exports.P2PWSClient = P2PWSClient;
+/**
+ * @class
+ * EEWDetectionに肉付けをするのクラス。
+ */
 var EEW = /** @class */ (function () {
     function EEW(data) {
         this._id = data._id;
@@ -107,6 +122,7 @@ var EEW = /** @class */ (function () {
     return EEW;
 }());
 exports.EEW = EEW;
+//Todo JSDocを書く
 var Data_OLD = /** @class */ (function () {
     function Data_OLD(data) {
         this._id = data._id;
