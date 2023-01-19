@@ -1,12 +1,24 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
-import { Data, Areapeers, EEWDetection, TsunamiWarning } from '../types';
+import { Data, Areapeers, EEWDetection, TsunamiWarning } from './types';
 /**
  * P2PQuake 非公式 WebsocketClient
  *
- * 作成者 : あきかき
+ * @author あきかき
  *
  * 〉注意
+ *
+ *   !!!! このクラスのrunメゾットを必ず実行してください !!!!
+ *
+ * 　今対応している情報は以下の通りです。
+ *
+ *　・551(通常地震情報)
+ *
+ * 　・552(津波情報)
+ *
+ * 　・554(緊急地震速報)
+ *
+ * 　・555(ペア情報)
  *
  *  型宣言フォルダはtypesです。
  *
