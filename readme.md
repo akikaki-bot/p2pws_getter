@@ -1,4 +1,6 @@
-# P2P地震情報_WebSocket API formatter for node
+# P2P地震情報_WebSocket API formatter for node.js
+
+/todo rewrite readme
 
 P2P地震情報 WebSocket API から送られてきた情報を `Data` か `Areapeers` 形式でフォーマットし、
 
