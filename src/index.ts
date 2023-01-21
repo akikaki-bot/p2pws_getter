@@ -3,9 +3,19 @@ import { WebSocket } from "ws"
 import {
     P2PClientClasses,
     Data,
+    Typeofinfo,
+    Infoonly,
+    HypocenterFormat,
+    Scale,
+    TsunamiTypes,
+    Forgintsunami,
+    PointFormat,
     Areapeers,
+    UserQuakeArray,
     EEWDetection,
-    TsunamiWarning
+    TsunamiWarning,
+    TsunamiIssues,
+    TsunamiAreas
  } from './types'
 
  /**
@@ -104,5 +114,22 @@ export declare interface P2PWSClient {
     on(event :'eewdetection', listener: (data: EEWDetection) => void): this
     on(event :'tsunamiwarning', listener: (data: TsunamiWarning) => void): this
 }
-
-
+/**
+ * index.ts - Endpoints
+ */
+export {
+   Data,
+   Typeofinfo,
+   Infoonly,
+   HypocenterFormat,
+   Scale,
+   TsunamiTypes,
+   Forgintsunami,
+   PointFormat,
+   Areapeers,
+   UserQuakeArray,
+   EEWDetection,
+   TsunamiWarning,
+   TsunamiIssues,
+   TsunamiAreas
+}
