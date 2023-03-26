@@ -60,17 +60,15 @@ var types_1 = require("./types");
  *
  * @author あきかき
  *
- * 〉注意
- *
- *   !!!! このクラスのrunメゾットを必ず実行してください !!!!
- *
  * 　今対応している情報は以下の通りです。
  *
  *　・551(通常地震情報)
  *
  * 　・552(津波情報)
  *
- * 　・554(緊急地震速報)
+ * 　・554(緊急地震速報 - 情報のみ)
+ *
+ * 　・556(緊急地震速報 - 詳細)
  *
  * 　・555(ペア情報)
  *
@@ -94,7 +92,9 @@ var types_1 = require("./types");
 var P2PWSClient = /** @class */ (function (_super) {
     __extends(P2PWSClient, _super);
     function P2PWSClient() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.run();
+        return _this;
     }
     P2PWSClient.prototype.run = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -138,6 +138,9 @@ var P2PWSClient = /** @class */ (function (_super) {
                         }
                         if (datas.code === 555) {
                             this.emit('areapeers', new types_1.P2PClientClasses.Areapeers_OLD(datas));
+                        }
+                        if (datas.code === 556) {
+                            this.emit('eew', new types_1.P2PClientClasses.DetailEEW(data));
                         }
                         if (datas.code === 554) {
                             this.emit('eewdetection', new types_1.P2PClientClasses.EEW(datas));

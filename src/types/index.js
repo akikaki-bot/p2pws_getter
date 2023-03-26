@@ -24,6 +24,19 @@ var P2PClientClasses;
         return EEW;
     }());
     P2PClientClasses.EEW = EEW;
+    var DetailEEW = /** @class */ (function () {
+        function DetailEEW(data) {
+            this._id = data._id;
+            this.time = data.time;
+            this.test = data.test;
+            this.earthquake = data.earthquake;
+            this.issue = data.issue;
+            this.cancelled = data.cancelled;
+            this.areas = data.areas;
+        }
+        return DetailEEW;
+    }());
+    P2PClientClasses.DetailEEW = DetailEEW;
     //Todo JSDocを書く
     var Data_OLD = /** @class */ (function () {
         function Data_OLD(data) {

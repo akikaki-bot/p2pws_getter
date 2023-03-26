@@ -1,14 +1,10 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
-import { Data, Areapeers, EEWDetection, TsunamiWarning } from './types';
+import { Data, Typeofinfo, Infoonly, HypocenterFormat, Scale, TsunamiTypes, Forgintsunami, PointFormat, Areapeers, UserQuakeArray, EEWDetection, TsunamiWarning, TsunamiIssues, TsunamiAreas, DetailEEW } from './types';
 /**
  * P2PQuake 非公式 WebsocketClient
  *
  * @author あきかき
- *
- * 〉注意
- *
- *   !!!! このクラスのrunメゾットを必ず実行してください !!!!
  *
  * 　今対応している情報は以下の通りです。
  *
@@ -16,7 +12,9 @@ import { Data, Areapeers, EEWDetection, TsunamiWarning } from './types';
  *
  * 　・552(津波情報)
  *
- * 　・554(緊急地震速報)
+ * 　・554(緊急地震速報 - 情報のみ)
+ *
+ * 　・556(緊急地震速報 - 詳細)
  *
  * 　・555(ペア情報)
  *
@@ -48,4 +46,9 @@ export declare interface P2PWSClient {
     on(event: 'areapeers', listener: (data: Areapeers) => void): this;
     on(event: 'eewdetection', listener: (data: EEWDetection) => void): this;
     on(event: 'tsunamiwarning', listener: (data: TsunamiWarning) => void): this;
+    on(event: 'eew', listener: (data: DetailEEW) => void): this;
 }
+/**
+ * index.ts - Endpoints
+ */
+export { Data, Typeofinfo, Infoonly, HypocenterFormat, Scale, TsunamiTypes, Forgintsunami, PointFormat, Areapeers, UserQuakeArray, EEWDetection, TsunamiWarning, TsunamiIssues, TsunamiAreas, DetailEEW };

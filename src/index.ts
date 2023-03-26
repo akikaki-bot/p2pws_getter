@@ -15,7 +15,8 @@ import {
     EEWDetection,
     TsunamiWarning,
     TsunamiIssues,
-    TsunamiAreas
+    TsunamiAreas,
+    DetailEEW
  } from './types'
 
  /**
@@ -23,17 +24,15 @@ import {
   * 
   * @author あきかき
   * 
-  * 〉注意
-  * 
-  *   !!!! このクラスのrunメゾットを必ず実行してください !!!!
-  * 
   * 　今対応している情報は以下の通りです。
   *   
   *　・551(通常地震情報)
   * 
   * 　・552(津波情報)
   * 
-  * 　・554(緊急地震速報)
+  * 　・554(緊急地震速報 - 情報のみ)
+  * 
+  * 　・556(緊急地震速報 - 詳細)
   * 
   * 　・555(ペア情報)
   * 
@@ -56,7 +55,10 @@ import {
   */
 
 export class P2PWSClient extends EventEmitter {
-     constructor(){ super() }
+     constructor(){ 
+      super() 
+      this.run()
+   }
      async run(){
        const ws = new WebSocket("wss://api.p2pquake.net/v2/ws")
 
@@ -84,7 +86,7 @@ export class P2PWSClient extends EventEmitter {
          * 
          */
         ws.onmessage = async (data : any) => {
-            const datas = JSON.parse(data.data.toString()) as Data | Areapeers | EEWDetection | TsunamiWarning
+            const datas = JSON.parse(data.data.toString()) as Data | Areapeers | EEWDetection | TsunamiWarning | DetailEEW
 
            if(datas.code === 551){
            this.emit('earthquake', new P2PClientClasses.Data_OLD(datas))
@@ -92,6 +94,10 @@ export class P2PWSClient extends EventEmitter {
 
            if(datas.code === 555){
            this.emit('areapeers', new P2PClientClasses.Areapeers_OLD(datas))
+           }
+
+           if(datas.code === 556){
+             this.emit('eew', new P2PClientClasses.DetailEEW(data))
            }
 
 
@@ -113,6 +119,7 @@ export declare interface P2PWSClient {
     on(event :'areapeers', listener: (data: Areapeers) => void): this
     on(event :'eewdetection', listener: (data: EEWDetection) => void): this
     on(event :'tsunamiwarning', listener: (data: TsunamiWarning) => void): this
+    on(event :'eew', listener : (data : DetailEEW) => void): this
 }
 /**
  * index.ts - Endpoints
@@ -131,5 +138,6 @@ export {
    EEWDetection,
    TsunamiWarning,
    TsunamiIssues,
-   TsunamiAreas
+   TsunamiAreas,
+   DetailEEW
 }
