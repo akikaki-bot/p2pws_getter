@@ -1,16 +1,44 @@
 # P2P地震情報_WebSocket API formatter for node.js
 
-/todo rewrite readme
-
-P2P地震情報 WebSocket API から送られてきた情報を `Data` か `Areapeers` 形式でフォーマットし、
-
-エミットするやつ
+P2P地震情報 WebSocket API から送られてきた情報を `Data` か `Areapeers` などなどの形式でフォーマットし、処理をします。
 
 ## Install
 
-```
+```cmd
 npm i p2peq_event
 ```
+
+## Events
+
+イベントがいくつかありますので、ここに書きます。
+
+- ready
+
+WebSocket接続完了時に発火するイベントです。
+
+返り値はVOIDです。
+
+- earthquake
+
+地震情報です。震度情報、震源情報等が返ってきます。
+
+- areapeers
+
+P2P地震情報に接続している各ユーザーの地域分布データが返ってきます。
+
+- eewdetection
+
+EEWが発表されたときに発火するイベントです。
+
+- eew
+
+EEWが発表されたときに発火するイベントです。
+
+このイベントでは詳細な情報が返ってきます。こちらの方がおすすめです。
+
+- tsunamiwarning
+
+津波情報についての情報が返ってきます。
 
 ## Example
 
@@ -18,117 +46,42 @@ npm i p2peq_event
 
 import { P2PWSClient } from 'p2peq_event'
 
-const client = new P2PWSClient()
+// CJS の場合であるなら
+// const { P2PWSClient } = require('p2peq_event')
 
-//これは絶対に実行しないと動きません
-client.run()
+const client = new P2PWSClient()
 
 client.on('earthquake', (data) => {
   /*
-  処理 (Return Type <Data>)
+  処理 (Return Data)
   */
-})
-
-client.on('areapeers', (data) => {
-    /*
-    処理 (Return Type <Areapeers>)
-    */
-})
-
-client.on('eewdetection', (data) => {
-    /*
-    処理 (Return Type <EEWDetection>)
-    */
 })
 
 ```
 
 ## Types
 
-> Data
-
-```
-_id:string
-    code: 551
-    time: string
-    issue:{
-        source: string
-        time :string
-        type : "ScalePrompt" | "Destination" | "ScaleAndDestination" | "DetailScale " | " Foreign " | "Other" 
-        correct: "None" | "Unknown" | "ScaleOnly" | "DestinationOnly" | "ScaleAndDestination"
-    }
-    earthquake:{
-        time: string
-        hypocenter: HypocenterFormat
-        maxScale: "-1" | "10" | "20" | "30" | "40" | "45" | "50" | "55" | "60" | "70"
-        domesticTsunami: "None" | "Unknown" | "Checking" | "NoneEffective" | "Watch" | "Warning"
-        forginTsunami: "None" | "Unknown" | "Checking" | "NonEffectiveNearby" | "WarningNearby" | "WarningPacific" | "WarningPacificWide" | "WarningIndian" | "WarningIndianWide" | "Potential"
-    }
-    points: Array<PointFormat>
-```
-
-Data > HypocenterFormat
-
-```
-name: string
-latitude:number | -200
-longitude: number | -200
-depth:number | 0 | -1
-magnitude:number | -1
-```
-
-Data > PointFormat
-
-```
-pref: string
-addr: string
-isArea: boolean
-scale: "10" | "20" | "30" | "40" | "45" | "46" | "50" | "55" | "60" | "70" 
-```
-
-Areapeers
-
-```
-    _id : string
-    areas: Array<UserQuakeArray>
-    code: 555
-    create_at: string
-    expire: string
-    hop: number
-    time: string
-    uid: string
-    ver : string
-```
-
-Areapeers > UserQuakeArray
-
-```
- id: number
- peer: number
-```
-
-EEWDetection
-
-```
-_id: string
-code: 554
-time: string
-type: string[]
-```
+src/typeを参照してください。
 
 ## Use Modules
 
-```
-ts-node
-typescript
+MainModule
+
+```npm
 ws
-node
+typescript
+```
+
+devModules
+
+```npm
+ts-node
 ```
 
 ## Licence
 
 MIT
 
-(c) 2022 akikaki Licence MIT
+(c) 2022 - 2023 akikaki Licence MIT
 
-(if you read more infomation about license, you can read that in license.)
+(if you wanna read more infomation about license, you can read that in license.)

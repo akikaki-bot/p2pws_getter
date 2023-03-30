@@ -150,7 +150,8 @@ export type TsunamiAreas = {
    name : string
 }
 
-export type TsunamiTypes = "MajorWarning"
+export type TsunamiTypes = 
+| "MajorWarning"
 | "Warning"
 | "Watch"
 | "Unknown"
