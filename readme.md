@@ -42,14 +42,16 @@ EEWが発表されたときに発火するイベントです。
 
 ## Example
 
+- Websocketを使う場合
+
 ```ts
 
-import { P2PWSClient } from 'p2peq_event'
+import { Client } from 'p2peq_event'
 
 // CJS の場合であるなら
 // const { P2PWSClient } = require('p2peq_event')
 
-const client = new P2PWSClient()
+const client = new Client()
 
 client.on('earthquake', (data) => {
   /*
@@ -59,9 +61,13 @@ client.on('earthquake', (data) => {
 
 ```
 
-## Types
+- DataManagerを使う場合
 
-src/typeを参照してください。
+```ts
+
+client.cache.resolve('id')
+// いずれかの情報を返します。
+```
 
 ## Use Modules
 
@@ -69,12 +75,12 @@ MainModule
 
 ```npm
 ws
-typescript
 ```
 
 devModules
 
 ```npm
+typescript
 ts-node
 ```
 

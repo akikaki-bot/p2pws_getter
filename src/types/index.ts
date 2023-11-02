@@ -1,132 +1,16 @@
-/**
- * 
- * libで使うClassたち。
- * 
- * 
- * 
- */
-export namespace P2PClientClasses {
-    /**
-     * @class
-     * EEWDetectionに肉付けをするのクラス。
-     */
-    export class EEW {
-      _id: string
-      code: 554
-      time: string
-      type: string[]
-      constructor(data: EEWDetection) {
-        this._id = data._id
-        this.code = data.code
-        this.time = data.time
-        this.type = data.type
-      }
-    }
+import { Areapeers } from "../components/areapeers";
+import { DetailEEW } from "../components/detaileew";
+import { EEW } from "../components/eew";
+import { EEWInfomation } from "../components/eewInfomation";
+import { Tsunami } from "../components/tsunami";
 
-    export class DetailEEW {
-      _id : string
-      code : 556
-      time : string
-      test : boolean
-      earthquake : {
-        originTime : string
-        arrivalTime : string
-        condition : string
-        hypocenter : {
-           name : string
-           reduceName : string
-           latitude : number | -200
-           longitude : number | -200
-           depth : number | -1
-           magunitude : number | -1
-        }
-      }
-      issue : {
-        time : string
-        eventId : string
-        serial : string
-      }
-      cancelled : boolean
-      areas : Array<EEWArea>
+export type ResolveP2PObject = ResolveJSONData & ResolveObject
 
-      constructor(data : DetailEEW) {
-         this._id = data._id
-         this.time = data.time
-         this.test = data.test
-         this.earthquake = data.earthquake
-         this.issue = data.issue
-         this.cancelled = data.cancelled
-         this.areas = data.areas
-      }
-    }
+export interface ResolveJSONData {
+	code : number
+}
 
-    //Todo JSDocを書く
-    export class Data_OLD {
-      _id: string
-      code: number
-      time: string
-      issue: {
-        source: string
-        time: string
-        type: Typeofinfo
-        correct: Infoonly
-      }
-      earthquake: {
-        time: string
-        hypocenter: HypocenterFormat
-        maxScale: Scale
-        domesticTsunami: Tsunamitype
-        forginTsunami: Forgintsunami
-      }
-      points: Array <PointFormat> 
-      constructor(data: Data) {
-        this._id = data._id
-        this.code = data.code
-        this.issue = data.issue
-        this.earthquake = data.earthquake
-        this.points = data.points
-      }
-    }
-    export class Areapeers_OLD {
-      _id: string
-      areas: Array <UserQuakeArray>
-      code: 555
-      create_at: string
-      expire: string
-      hop: number
-      time: string
-      uid: string
-      ver: string
-      constructor(data: Areapeers) {
-        this._id = data._id
-        this.areas = data.areas
-        this.code = data.code
-        this.create_at = data.create_at
-        this.expire = data.expire
-        this.hop = data.hop
-        this.time = data.time
-        this.uid = data.uid
-        this.ver = data.ver
-      }
-    }
-
-    export class Tsunami {
-      _id: string
-      code : 552
-      time: string;
-      cancelled: boolean
-      issue : TsunamiIssues
-      areas : TsunamiAreas[];
-      constructor(data : TsunamiWarning) {
-        this._id = data._id
-        this.areas = data.areas
-        this.code = data.code
-        this.cancelled = data.cancelled
-        this.issue = data.issue
-        this.areas = data.areas
-      }
-    }
-  }
+export type ResolveObject = { [key : string] : string | number | object }
 
 export type TsunamiWarning = {
    _id: string;
@@ -166,7 +50,7 @@ export type TsunamiTypes =
  * typeとかcorrectとかdomesticTsunamiにある"ScalePrompt"とかの謎の英語の解説は別紙の
  * example/lang.mdにないよ。
  */
-export type Data = {
+export interface Data {
     _id:string
     code: 551
     time: string
@@ -186,27 +70,6 @@ export type Data = {
     points: Array<PointFormat>
 }
 
-/**
- * @type EEWDetection
- * 
- * EEWの生データ。
- * 
- */
-export type EEWDetection = { 
-    _id: string
-    code: 554
-    time: string
-    type: string[]
-}
-
-type Userquake = {
-    _id: string
-    areas: Array<UserQuakeArray>
-    code: number
-    time: string;
-}
-
- 
 
 export type PointFormat = 
     {
@@ -215,38 +78,6 @@ export type PointFormat =
         isArea: boolean
         scale: Scale
     }
-
-/**
- * 詳細な緊急地震速報
- */
-export type DetailEEW = {
-   _id : string
-   code : 556
-   time : string,
-   test : boolean
-   earthquake : EEW_Earthquake
-   issue : Issue
-   cancelled : boolean
-   areas : Array<EEWArea>
-}
-
-export type EEWArea = {
-  pref : string,
-  name : string,
-  scaleFrom : number,
-  scaleTo : number
-  kindCode : EEWKindCode
-  arrivalTime : string
-}
-
-export const enum EEWKindCode {
-  /** 主要動未到達 */
-   SecondaryUnReached = "10",
-   /** 主要動到達済 */
-   SecondaryReached = "11",
-   /**主要動の到達予想なし（PLUM法による予想）*/
-   SecondaryReachedNoForecastinPLUM = "19"
-}
 
 export type Issue = {
    time : string,
@@ -318,17 +149,6 @@ export type HypocenterFormat = {
 
 export type UserQuakeArray = { id: number, peer: number}
 
-export type Areapeers = {
-    _id : string
-    areas: Array<UserQuakeArray>
-    code: 555
-    create_at: string
-    expire: string
-    hop: number
-    time: string
-    uid: string
-    ver : string
-}   
-
+export type InfomationResolveType = EEWInfomation | Areapeers | DetailEEW | EEW | Tsunami
 
 

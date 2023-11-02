@@ -29,7 +29,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -50,19 +50,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
-exports.P2PWSClient = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DetailEEW = exports.Tsunami = exports.EEW = exports.Areapeers = exports.EEWInfomation = exports.Client = void 0;
 var events_1 = require("events");
 var ws_1 = require("ws");
-var types_1 = require("./types");
+var components_1 = require("./components");
+Object.defineProperty(exports, "EEWInfomation", { enumerable: true, get: function () { return components_1.EEWInfomation; } });
+Object.defineProperty(exports, "Areapeers", { enumerable: true, get: function () { return components_1.Areapeers; } });
+Object.defineProperty(exports, "EEW", { enumerable: true, get: function () { return components_1.EEW; } });
+Object.defineProperty(exports, "Tsunami", { enumerable: true, get: function () { return components_1.Tsunami; } });
+Object.defineProperty(exports, "DetailEEW", { enumerable: true, get: function () { return components_1.DetailEEW; } });
 /**
- * P2PQuake 非公式 WebsocketClient
+ * ## Client
+ *
+ * P2P地震情報 非公式データマネージャー＆ウェブソケットパッケージ
+ *
+ * @example
+ *
+ * const client = new Client();
+ *
+ * client.on('ready' , () => {
+ * 	  console.log('Manager ready!')
+ * })
+ *
+ * client.cache.resolve('id') // -> return something code data or null
  *
  * @author あきかき
  *
  * 　今対応している情報は以下の通りです。
  *
- *　・551(通常地震情報)
+ *　 ・551(通常地震情報)
  *
  * 　・552(津波情報)
  *
@@ -71,12 +88,6 @@ var types_1 = require("./types");
  * 　・556(緊急地震速報 - 詳細)
  *
  * 　・555(ペア情報)
- *
- *  型宣言フォルダはtypesです。
- *
- * 間違えないようにはしていますが、手作業なのでミスが発生している可能性があります。
- *
- * その場合は書き換えをお願いいたします....
  *
  * 〉型参考元
  *
@@ -89,14 +100,15 @@ var types_1 = require("./types");
  * 〉〉〉〉〉〉〉〉〉〉〉〉〉〉〉〉〉〉〉〉〉
  *
  */
-var P2PWSClient = /** @class */ (function (_super) {
-    __extends(P2PWSClient, _super);
-    function P2PWSClient() {
+var Client = /** @class */ (function (_super) {
+    __extends(Client, _super);
+    function Client() {
         var _this = _super.call(this) || this;
+        _this.cache = new components_1.DataManager();
         _this.run();
         return _this;
     }
-    P2PWSClient.prototype.run = function () {
+    Client.prototype.run = function () {
         return __awaiter(this, void 0, void 0, function () {
             var ws;
             var _this = this;
@@ -108,7 +120,7 @@ var P2PWSClient = /** @class */ (function (_super) {
                  */
                 ws.onopen = function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        this.emit('ready');
+                        this.emit('ready', function () { });
                         return [2 /*return*/];
                     });
                 }); };
@@ -134,19 +146,24 @@ var P2PWSClient = /** @class */ (function (_super) {
                     return __generator(this, function (_a) {
                         datas = JSON.parse(data.data.toString());
                         if (datas.code === 551) {
-                            this.emit('earthquake', new types_1.P2PClientClasses.Data_OLD(datas));
+                            this.emit('earthquake', new components_1.EEWInfomation(datas));
+                            this.cache.set(datas._id, new components_1.EEWInfomation(datas));
                         }
                         if (datas.code === 555) {
-                            this.emit('areapeers', new types_1.P2PClientClasses.Areapeers_OLD(datas));
+                            this.emit('areapeers', new components_1.Areapeers(datas));
+                            this.cache.set(datas._id, new components_1.Areapeers(datas));
                         }
                         if (datas.code === 556) {
-                            this.emit('eew', new types_1.P2PClientClasses.DetailEEW(data));
+                            this.emit('eew', new components_1.DetailEEW(data));
+                            this.cache.set(datas._id, new components_1.DetailEEW(datas));
                         }
                         if (datas.code === 554) {
-                            this.emit('eewdetection', new types_1.P2PClientClasses.EEW(datas));
+                            this.emit('eewdetection', new components_1.EEW(datas));
+                            this.cache.set(datas._id, new components_1.EEW(datas));
                         }
                         if (datas.code === 552) {
-                            this.emit('tsunamiwarning', new types_1.P2PClientClasses.Tsunami(datas));
+                            this.emit('tsunamiwarning', new components_1.Tsunami(datas));
+                            this.cache.set(datas._id, new components_1.Tsunami(datas));
                         }
                         return [2 /*return*/];
                     });
@@ -155,6 +172,6 @@ var P2PWSClient = /** @class */ (function (_super) {
             });
         });
     };
-    return P2PWSClient;
+    return Client;
 }(events_1.EventEmitter));
-exports.P2PWSClient = P2PWSClient;
+exports.Client = Client;

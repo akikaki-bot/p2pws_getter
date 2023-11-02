@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DetailEEW = exports.Tsunami = exports.EEW = exports.Areapeers = exports.EEWInfomation = exports.Client = void 0;
+var src_1 = require("./src");
+Object.defineProperty(exports, "Client", { enumerable: true, get: function () { return src_1.Client; } });
+var components_1 = require("./src/components");
+Object.defineProperty(exports, "EEWInfomation", { enumerable: true, get: function () { return components_1.EEWInfomation; } });
+Object.defineProperty(exports, "Areapeers", { enumerable: true, get: function () { return components_1.Areapeers; } });
+Object.defineProperty(exports, "EEW", { enumerable: true, get: function () { return components_1.EEW; } });
+Object.defineProperty(exports, "Tsunami", { enumerable: true, get: function () { return components_1.Tsunami; } });
+Object.defineProperty(exports, "DetailEEW", { enumerable: true, get: function () { return components_1.DetailEEW; } });
