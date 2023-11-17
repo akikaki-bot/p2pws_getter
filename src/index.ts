@@ -2,6 +2,7 @@ import { EventEmitter } from "events";
 import { WebSocket } from "ws"
 
 import {
+	InfomationResolve,
 	InfomationResolveType,
 } from './types'
 
@@ -63,15 +64,19 @@ export class Client extends EventEmitter {
 	 * データマネージャークラス。IDを参照してキャッシュもしくはAPIから取得します。
 	 */
 	public cache : DataManager<InfomationResolveType>;
+	private wsUri : string
 
 
-	constructor() {
+	constructor( options ?: ClientOptions ) {
 		super()
 		this.cache = new DataManager();
+		this.wsUri = typeof options.sandboxUri !== "undefined" ? options.sandboxUri : "wss://api.p2pquake.net/v2/ws"
+
 		this.run()
+
 	}
 	async run() {
-		const ws = new WebSocket("wss://api.p2pquake.net/v2/ws")
+		const ws = new WebSocket(this.wsUri)
 
 		/**
 		 * 
@@ -123,20 +128,28 @@ export class Client extends EventEmitter {
 				this.emit('tsunamiwarning', new Tsunami(datas))
 				this.cache.set( datas._id, new Tsunami(datas) )
 			}
+
+			this.emit('infomations', new InfomationResolve(datas))
 		}
 	}
 }
 
-export declare interface P2PWSClient {
+export interface ClientOptions {
+	sandboxUri ?: "wss://api-realtime-sandbox.p2pquake.net/v2/ws"
+}
+
+export declare interface Client {
 	on(event: 'earthquake', listener: (data: EEWInfomation) => void): this
 	on(event: 'areapeers', listener: (data: Areapeers) => void): this
 	on(event: 'eewdetection', listener: (data: EEW) => void): this
 	on(event: 'tsunamiwarning', listener: (data: Tsunami) => void): this
 	on(event: 'eew', listener: (data: DetailEEW) => void): this
+	on(event: 'infomations', listener: (data : InfomationResolve) => void): this
 
 	on(event: 'ready', listener: () => void): this
 	on(event: 'error', listener: (error: Error) => void): this
 }
+
 /**
  * index.ts - Endpoints
  */
@@ -147,3 +160,5 @@ export {
 	Tsunami,
 	DetailEEW
 }
+
+

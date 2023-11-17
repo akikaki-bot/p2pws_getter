@@ -8,6 +8,9 @@ var EEWInfomation = /** @class */ (function () {
         this.earthquake = data.earthquake;
         this.points = data.points;
     }
+    EEWInfomation.prototype.isEEWInfomation = function () {
+        return this.code === 551;
+    };
     return EEWInfomation;
 }());
 exports.EEWInfomation = EEWInfomation;

@@ -151,4 +151,32 @@ export type UserQuakeArray = { id: number, peer: number}
 
 export type InfomationResolveType = EEWInfomation | Areapeers | DetailEEW | EEW | Tsunami
 
+export class InfomationResolve {
+    code : number
+
+    constructor( data : InfomationResolveType ) {
+        this.code = data.code
+    }
+
+    isEEWInfomation(): this is EEWInfomation {
+        return this.code === 551
+    }
+
+    isAreapeers(): this is Areapeers {
+        return this.code === 555
+    }
+
+    isDetailEEW(): this is DetailEEW {
+        return this.code === 556
+    }
+
+    isEEW(): this is EEW {
+        return this.code === 554
+    }
+
+    isTsunami(): this is Tsunami {
+        return this.code === 552
+    }
+}
+
 

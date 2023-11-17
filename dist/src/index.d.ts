@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
-import { InfomationResolveType } from './types';
+import { InfomationResolve, InfomationResolveType } from './types';
 import { EEWInfomation, Areapeers, EEW, Tsunami, DetailEEW, DataManager } from "./components";
 /**
  * ## Client
@@ -49,15 +49,20 @@ export declare class Client extends EventEmitter {
      * データマネージャークラス。IDを参照してキャッシュもしくはAPIから取得します。
      */
     cache: DataManager<InfomationResolveType>;
-    constructor();
+    private wsUri;
+    constructor(options?: ClientOptions);
     run(): Promise<void>;
 }
-export declare interface P2PWSClient {
+export interface ClientOptions {
+    sandboxUri?: "wss://api-realtime-sandbox.p2pquake.net/v2/ws";
+}
+export declare interface Client {
     on(event: 'earthquake', listener: (data: EEWInfomation) => void): this;
     on(event: 'areapeers', listener: (data: Areapeers) => void): this;
     on(event: 'eewdetection', listener: (data: EEW) => void): this;
     on(event: 'tsunamiwarning', listener: (data: Tsunami) => void): this;
     on(event: 'eew', listener: (data: DetailEEW) => void): this;
+    on(event: 'infomations', listener: (data: InfomationResolve) => void): this;
     on(event: 'ready', listener: () => void): this;
     on(event: 'error', listener: (error: Error) => void): this;
 }

@@ -8,21 +8,25 @@ import { Tsunami } from "./tsunami"
 
 
 
-export class DataManager<T extends DataManagerResolveDatas> extends Map<string , T> {
+export class DataManager<T extends DataManagerResolveDatas> {
 
     private APIURL : string
+    private internalCache : Map<string , T>
 
     constructor() {
-        super()
-
+        this.internalCache = new Map<string,T>()
         this.APIURL = "api.p2pquake.net/v2"
+    }
+
+    public set( args : string , data : T ) {
+        return this.internalCache.set(args , data)
     }
 
     public async resolve( config : DataManagerResolveConfig ) {
         if(typeof config === "string") {
-            return this.get(config) ?? await this.__fetchFromId(config)
+            return this.internalCache.get(config) ?? await this.__fetchFromId(config)
         }
-        return this.get(config.id) ?? await this.__fetchFromId(config.id)
+        return this.internalCache.get(config.id) ?? await this.__fetchFromId(config.id)
     }
 
     private async __fetchFromId ( id : string ) : Promise<DataManagerResolveDatas> {

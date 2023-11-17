@@ -18,4 +18,5 @@ export declare class EEWInfomation {
     };
     points: Array<PointFormat>;
     constructor(data: EEWInfomation);
+    isEEWInfomation(): this is EEWInfomation;
 }

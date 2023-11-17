@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -57,13 +42,14 @@ var detaileew_1 = require("./detaileew");
 var eew_1 = require("./eew");
 var eewInfomation_1 = require("./eewInfomation");
 var tsunami_1 = require("./tsunami");
-var DataManager = /** @class */ (function (_super) {
-    __extends(DataManager, _super);
+var DataManager = /** @class */ (function () {
     function DataManager() {
-        var _this = _super.call(this) || this;
-        _this.APIURL = "api.p2pquake.net/v2";
-        return _this;
+        this.internalCache = new Map();
+        this.APIURL = "api.p2pquake.net/v2";
     }
+    DataManager.prototype.set = function (args, data) {
+        return this.internalCache.set(args, data);
+    };
     DataManager.prototype.resolve = function (config) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
@@ -72,7 +58,7 @@ var DataManager = /** @class */ (function (_super) {
                 switch (_e.label) {
                     case 0:
                         if (!(typeof config === "string")) return [3 /*break*/, 4];
-                        if (!((_a = this.get(config)) !== null && _a !== void 0)) return [3 /*break*/, 1];
+                        if (!((_a = this.internalCache.get(config)) !== null && _a !== void 0)) return [3 /*break*/, 1];
                         _c = _a;
                         return [3 /*break*/, 3];
                     case 1: return [4 /*yield*/, this.__fetchFromId(config)];
@@ -81,7 +67,7 @@ var DataManager = /** @class */ (function (_super) {
                         _e.label = 3;
                     case 3: return [2 /*return*/, _c];
                     case 4:
-                        if (!((_b = this.get(config.id)) !== null && _b !== void 0)) return [3 /*break*/, 5];
+                        if (!((_b = this.internalCache.get(config.id)) !== null && _b !== void 0)) return [3 /*break*/, 5];
                         _d = _b;
                         return [3 /*break*/, 7];
                     case 5: return [4 /*yield*/, this.__fetchFromId(config.id)];
@@ -120,5 +106,5 @@ var DataManager = /** @class */ (function (_super) {
         });
     };
     return DataManager;
-}(Map));
+}());
 exports.DataManager = DataManager;

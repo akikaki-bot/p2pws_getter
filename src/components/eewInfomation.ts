@@ -25,4 +25,8 @@ export class EEWInfomation {
 		this.earthquake = data.earthquake
 		this.points = data.points
 	}
+
+	isEEWInfomation(): this is EEWInfomation {
+		return this.code === 551
+	}
 }

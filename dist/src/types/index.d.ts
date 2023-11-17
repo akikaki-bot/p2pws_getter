@@ -133,3 +133,12 @@ export type UserQuakeArray = {
     peer: number;
 };
 export type InfomationResolveType = EEWInfomation | Areapeers | DetailEEW | EEW | Tsunami;
+export declare class InfomationResolve {
+    code: number;
+    constructor(data: InfomationResolveType);
+    isEEWInfomation(): this is EEWInfomation;
+    isAreapeers(): this is Areapeers;
+    isDetailEEW(): this is DetailEEW;
+    isEEW(): this is EEW;
+    isTsunami(): this is Tsunami;
+}

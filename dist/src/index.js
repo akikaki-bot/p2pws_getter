@@ -54,6 +54,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DetailEEW = exports.Tsunami = exports.EEW = exports.Areapeers = exports.EEWInfomation = exports.Client = void 0;
 var events_1 = require("events");
 var ws_1 = require("ws");
+var types_1 = require("./types");
 var components_1 = require("./components");
 Object.defineProperty(exports, "EEWInfomation", { enumerable: true, get: function () { return components_1.EEWInfomation; } });
 Object.defineProperty(exports, "Areapeers", { enumerable: true, get: function () { return components_1.Areapeers; } });
@@ -102,9 +103,10 @@ Object.defineProperty(exports, "DetailEEW", { enumerable: true, get: function ()
  */
 var Client = /** @class */ (function (_super) {
     __extends(Client, _super);
-    function Client() {
+    function Client(options) {
         var _this = _super.call(this) || this;
         _this.cache = new components_1.DataManager();
+        _this.wsUri = typeof options.sandboxUri !== "undefined" ? options.sandboxUri : "wss://api.p2pquake.net/v2/ws";
         _this.run();
         return _this;
     }
@@ -113,7 +115,7 @@ var Client = /** @class */ (function (_super) {
             var ws;
             var _this = this;
             return __generator(this, function (_a) {
-                ws = new ws_1.WebSocket("wss://api.p2pquake.net/v2/ws");
+                ws = new ws_1.WebSocket(this.wsUri);
                 /**
                  *
                  * Readyされたときに発火するやつ
@@ -165,6 +167,7 @@ var Client = /** @class */ (function (_super) {
                             this.emit('tsunamiwarning', new components_1.Tsunami(datas));
                             this.cache.set(datas._id, new components_1.Tsunami(datas));
                         }
+                        this.emit('infomations', new types_1.InfomationResolve(datas));
                         return [2 /*return*/];
                     });
                 }); };
