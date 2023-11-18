@@ -70,7 +70,10 @@ export class Client extends EventEmitter {
 	constructor( options ?: ClientOptions ) {
 		super()
 		this.cache = new DataManager();
-		this.wsUri = typeof options.sandboxUri !== "undefined" ? options.sandboxUri : "wss://api.p2pquake.net/v2/ws"
+		this.wsUri = 
+			typeof options !== "undefined" && typeof options.sandboxUri !== "undefined" ? 
+			options.sandboxUri : 
+			"wss://api.p2pquake.net/v2/ws"
 
 		this.run()
 
@@ -83,7 +86,7 @@ export class Client extends EventEmitter {
 		 * Readyされたときに発火するやつ
 		 */
 		ws.onopen = async () => {
-			this.emit('ready', () => {})
+			this.emit('ready', new ReadyMessage({ wsurl : this.wsUri , connection : ws.readyState}))
 		}
 
 		/**
@@ -138,6 +141,15 @@ export interface ClientOptions {
 	sandboxUri ?: "wss://api-realtime-sandbox.p2pquake.net/v2/ws"
 }
 
+export class ReadyMessage {
+	wsurl : string
+	connection : number
+	constructor( data : ReadyMessage ) {
+		this.wsurl = data.wsurl
+		this.connection = data.connection
+	}
+}
+
 export declare interface Client {
 	on(event: 'earthquake', listener: (data: EEWInfomation) => void): this
 	on(event: 'areapeers', listener: (data: Areapeers) => void): this
@@ -146,7 +158,7 @@ export declare interface Client {
 	on(event: 'eew', listener: (data: DetailEEW) => void): this
 	on(event: 'infomations', listener: (data : InfomationResolve) => void): this
 
-	on(event: 'ready', listener: () => void): this
+	on(event: 'ready', listener: (message : ReadyMessage) => void): this
 	on(event: 'error', listener: (error: Error) => void): this
 }
 

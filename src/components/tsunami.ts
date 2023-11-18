@@ -7,6 +7,7 @@ export class Tsunami {
     cancelled: boolean
     issue: TsunamiIssues
     areas: TsunamiAreas[];
+    
     constructor(data: TsunamiWarning) {
         this._id = data._id
         this.areas = data.areas

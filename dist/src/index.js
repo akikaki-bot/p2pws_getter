@@ -51,7 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DetailEEW = exports.Tsunami = exports.EEW = exports.Areapeers = exports.EEWInfomation = exports.Client = void 0;
+exports.DetailEEW = exports.Tsunami = exports.EEW = exports.Areapeers = exports.EEWInfomation = exports.ReadyMessage = exports.Client = void 0;
 var events_1 = require("events");
 var ws_1 = require("ws");
 var types_1 = require("./types");
@@ -106,7 +106,10 @@ var Client = /** @class */ (function (_super) {
     function Client(options) {
         var _this = _super.call(this) || this;
         _this.cache = new components_1.DataManager();
-        _this.wsUri = typeof options.sandboxUri !== "undefined" ? options.sandboxUri : "wss://api.p2pquake.net/v2/ws";
+        _this.wsUri =
+            typeof options !== "undefined" && typeof options.sandboxUri !== "undefined" ?
+                options.sandboxUri :
+                "wss://api.p2pquake.net/v2/ws";
         _this.run();
         return _this;
     }
@@ -122,7 +125,7 @@ var Client = /** @class */ (function (_super) {
                  */
                 ws.onopen = function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        this.emit('ready', function () { });
+                        this.emit('ready', new ReadyMessage({ wsurl: this.wsUri, connection: ws.readyState }));
                         return [2 /*return*/];
                     });
                 }); };
@@ -178,3 +181,11 @@ var Client = /** @class */ (function (_super) {
     return Client;
 }(events_1.EventEmitter));
 exports.Client = Client;
+var ReadyMessage = /** @class */ (function () {
+    function ReadyMessage(data) {
+        this.wsurl = data.wsurl;
+        this.connection = data.connection;
+    }
+    return ReadyMessage;
+}());
+exports.ReadyMessage = ReadyMessage;

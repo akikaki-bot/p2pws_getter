@@ -56,6 +56,11 @@ export declare class Client extends EventEmitter {
 export interface ClientOptions {
     sandboxUri?: "wss://api-realtime-sandbox.p2pquake.net/v2/ws";
 }
+export declare class ReadyMessage {
+    wsurl: string;
+    connection: number;
+    constructor(data: ReadyMessage);
+}
 export declare interface Client {
     on(event: 'earthquake', listener: (data: EEWInfomation) => void): this;
     on(event: 'areapeers', listener: (data: Areapeers) => void): this;
@@ -63,7 +68,7 @@ export declare interface Client {
     on(event: 'tsunamiwarning', listener: (data: Tsunami) => void): this;
     on(event: 'eew', listener: (data: DetailEEW) => void): this;
     on(event: 'infomations', listener: (data: InfomationResolve) => void): this;
-    on(event: 'ready', listener: () => void): this;
+    on(event: 'ready', listener: (message: ReadyMessage) => void): this;
     on(event: 'error', listener: (error: Error) => void): this;
 }
 /**
