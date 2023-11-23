@@ -252,3 +252,7 @@ export class InfomationResolve {
 }
 
 
+
+export type InfomationCode = 
+| 551
+| 552

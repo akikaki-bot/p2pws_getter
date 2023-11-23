@@ -2,3 +2,4 @@ build.bat
 /src
 package-lock.json
 node_modules
+test

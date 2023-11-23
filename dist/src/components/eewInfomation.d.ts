@@ -1,22 +1,10 @@
-import { Forgintsunami, HypocenterFormat, Infoonly, PointFormat, Scale, Tsunamitype, Typeofinfo } from "../types";
-export declare class EEWInfomation {
+import { JMAQuake, Points, QuakeDetail, QuakeIssues } from "../types/jmaquake";
+export declare class EEWInfomation implements JMAQuake {
     _id: string;
     code: 551;
     time: string;
-    issue: {
-        source: string;
-        time: string;
-        type: Typeofinfo;
-        correct: Infoonly;
-    };
-    earthquake: {
-        time: string;
-        hypocenter: HypocenterFormat;
-        maxScale: Scale;
-        domesticTsunami: Tsunamitype;
-        forginTsunami: Forgintsunami;
-    };
-    points: Array<PointFormat>;
+    issue: QuakeIssues;
+    earthquake: QuakeDetail;
+    points: Points[];
     constructor(data: EEWInfomation);
-    isEEWInfomation(): this is EEWInfomation;
 }

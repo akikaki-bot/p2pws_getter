@@ -1,4 +1,4 @@
-import { InfomationResolveType, ResolveP2PObject } from "../types"
+import { InfomationCode, InfomationResolveType, ResolveP2PObject } from "../types"
 import { Areapeers } from "./areapeers"
 import { DetailEEW } from "./detaileew"
 import { EEW } from "./eew"
@@ -22,15 +22,15 @@ export class DataManager<T extends DataManagerResolveDatas> {
         return this.internalCache.set(args , data)
     }
 
-    public async resolve( config : DataManagerResolveConfig ) {
+    public async resolve( code : InfomationCode , config : DataManagerResolveConfig ) {
         if(typeof config === "string") {
-            return this.internalCache.get(config) ?? await this.__fetchFromId(config)
+            return this.internalCache.get(config) ?? await this.__fetchFromId(code , config)
         }
-        return this.internalCache.get(config.id) ?? await this.__fetchFromId(config.id)
+        return this.internalCache.get(config.id) ?? await this.__fetchFromId(code, config.id)
     }
 
-    private async __fetchFromId ( id : string ) : Promise<DataManagerResolveDatas> {
-        const response = await fetch(`https://${this.APIURL}/jma/quake/${id}`)
+    private async __fetchFromId ( code : InfomationCode, id : string ) : Promise<DataManagerResolveDatas> {
+        const response = await fetch(`https://${this.APIURL}/${this.resolvePathFromCode(code)}/${id}`)
         if(!response.ok) return null;
         const data = await response.json() as InfomationResolveType
         
@@ -41,6 +41,13 @@ export class DataManager<T extends DataManagerResolveDatas> {
             case 554 : return new EEW(data)
             case 552 : return new Tsunami(data)
             default : return null;
+        }
+    }
+
+    private resolvePathFromCode ( code : InfomationCode ) {
+        switch(code) {
+            case 551: return "jma/quake"
+            case 552: return "jma/tsunami"
         }
     }
 }

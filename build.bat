@@ -1,8 +1,6 @@
 @echo on
-npx tsc src/index.ts
-npx tsc src/types/index.ts
-npx tsc src/index.ts --declaration
-npx tsc src/types/index.ts --declaration
-
+npx tsc
+npx tsc --declaration
 echo "build success"
+pause
 

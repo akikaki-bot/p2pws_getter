@@ -90,7 +90,7 @@ Object.defineProperty(exports, "DetailEEW", { enumerable: true, get: function ()
  *
  * 　・555(ペア情報)
  *
- * 〉型参考元
+ * 〉型名・型・説明参考
  *
  * [p2pquake.net/jsonapi_v2](https://www.p2pquake.net/json_api_v2/#/)
  *

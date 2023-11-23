@@ -198,3 +198,4 @@ export declare class InfomationResolve {
     isEEW(): this is EEW;
     isTsunami(): this is Tsunami;
 }
+export type InfomationCode = 551 | 552;

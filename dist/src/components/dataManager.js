@@ -50,7 +50,7 @@ var DataManager = /** @class */ (function () {
     DataManager.prototype.set = function (args, data) {
         return this.internalCache.set(args, data);
     };
-    DataManager.prototype.resolve = function (config) {
+    DataManager.prototype.resolve = function (code, config) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var _c, _d;
@@ -61,7 +61,7 @@ var DataManager = /** @class */ (function () {
                         if (!((_a = this.internalCache.get(config)) !== null && _a !== void 0)) return [3 /*break*/, 1];
                         _c = _a;
                         return [3 /*break*/, 3];
-                    case 1: return [4 /*yield*/, this.__fetchFromId(config)];
+                    case 1: return [4 /*yield*/, this.__fetchFromId(code, config)];
                     case 2:
                         _c = _e.sent();
                         _e.label = 3;
@@ -70,7 +70,7 @@ var DataManager = /** @class */ (function () {
                         if (!((_b = this.internalCache.get(config.id)) !== null && _b !== void 0)) return [3 /*break*/, 5];
                         _d = _b;
                         return [3 /*break*/, 7];
-                    case 5: return [4 /*yield*/, this.__fetchFromId(config.id)];
+                    case 5: return [4 /*yield*/, this.__fetchFromId(code, config.id)];
                     case 6:
                         _d = _e.sent();
                         _e.label = 7;
@@ -79,12 +79,12 @@ var DataManager = /** @class */ (function () {
             });
         });
     };
-    DataManager.prototype.__fetchFromId = function (id) {
+    DataManager.prototype.__fetchFromId = function (code, id) {
         return __awaiter(this, void 0, void 0, function () {
             var response, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, fetch("https://".concat(this.APIURL, "/jma/quake/").concat(id))];
+                    case 0: return [4 /*yield*/, fetch("https://".concat(this.APIURL, "/").concat(this.resolvePathFromCode(code), "/").concat(id))];
                     case 1:
                         response = _a.sent();
                         if (!response.ok)
@@ -104,6 +104,12 @@ var DataManager = /** @class */ (function () {
                 }
             });
         });
+    };
+    DataManager.prototype.resolvePathFromCode = function (code) {
+        switch (code) {
+            case 551: return "jma/quake";
+            case 552: return "jma/tsunami";
+        }
     };
     return DataManager;
 }());
